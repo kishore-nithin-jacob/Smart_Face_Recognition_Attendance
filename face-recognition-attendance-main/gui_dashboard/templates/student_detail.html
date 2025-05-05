@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student {{ student_id }} - Attendance</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+        th { background: #f0f0f0; }
+        .chart-container { width: 60%; margin: 30px auto; }
+    </style>
+</head>
+<body>
+    <h1>Student {{ student_id }} Attendance</h1>
+    <p>Semester: {{ semester.startdate }} to {{ semester.enddate }}</p>
+
+    <h2>Attendance Records</h2>
+    <table>
+        <tr>
+            <th>Date</th><th>Course ID</th><th>Period</th><th>Status</th>
+        </tr>
+        {% for rec in records %}
+        <tr>
+            <td>{{ rec.date }}</td>
+            <td>{{ rec.course_id }}</td>
+            <td>{{ rec.period }}</td>
+            <td>{{ rec.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Attendance Percentage</h2>
+    <div class="chart-container">
+        <canvas id="attendanceChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('attendanceChart').getContext('2d');
+        const attendanceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ percentages.keys()|list }},
+                datasets: [{
+                    label: 'Attendance %',
+                    data: {{ percentages.values()|list }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    </script>
+
+    <a href="{{ url_for('index') }}">Back to Student List</a>
+</body>
+</html>

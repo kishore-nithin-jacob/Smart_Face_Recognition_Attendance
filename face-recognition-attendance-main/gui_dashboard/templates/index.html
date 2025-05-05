@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+</head>
+<body>
+    <h1>Select a Student</h1>
+    <ul>
+        {% for sid in students %}
+        <li><a href="{{ url_for('student_detail', student_id=sid) }}">Student {{ sid }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
